@@ -21,12 +21,13 @@ public class Order {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    // 디폴트가 지연로딩(Lazy)
-    @OneToMany(mappedBy = "order")
+    // Order -> OrderItem으로 모든 작업 전파
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     // 디폴트가 즉시로딩(EAGER) -> 지연로딩(LAZY)로 바꿔야 함
-    @OneToOne(fetch = FetchType.LAZY)
+    // Order -> Delivery로 모든 작업 전파
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
