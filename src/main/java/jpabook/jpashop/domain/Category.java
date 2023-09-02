@@ -25,10 +25,16 @@ public class Category {
     private List<Item> items = new ArrayList<>();
 
     // 디폴트가 즉시로딩(EAGER) -> 지연로딩(LAZY)로 바꿔야 함
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY) // 순환참조
     @JoinColumn(name = "parent_id")
     private Category parent;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent") // 순환참조
     private List<Category> child = new ArrayList<>();
+
+    // [ 연관관계 편의 메서드 ]
+    public void addChildCategory(Category child) {
+        this.child.add(child);
+        child.setParent(this);
+    }
 }
