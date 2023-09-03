@@ -1,20 +1,19 @@
 package jpabook.jpashop.repository;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jpabook.jpashop.domain.Member;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor  // 엔티티 매니저를 생성자 주입해줌
 public class MemberRepository {
-
-    // 스프링이 JPA 엔티티 매니저 주입
-    @PersistenceContext
-    private EntityManager em;
+    private final EntityManager em;
 
     public void save(Member member) {
+        // 영속성 컨텍스트에 싣는다.
         em.persist(member);
     }
 
