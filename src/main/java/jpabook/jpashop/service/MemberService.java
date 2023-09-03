@@ -21,13 +21,13 @@ public class MemberService {
     @Transactional  // 쓰기를 하는 메서드에는 readOnly = false로 적용
     public Long join(Member member) {
         // 중복 회원 검증
-        validateMemeber(member);
+        validateMember(member);
         memberRepository.save(member);
         return member.getId();
     }
 
     // 중복 회원 검증
-    private void validateMemeber(Member member) {
+    private void validateMember(Member member) {
         List<Member> members = memberRepository.findByName(member.getName());
 
         if (!members.isEmpty()) {
@@ -39,11 +39,11 @@ public class MemberService {
      * 회원 전체 조회
      * @return 모든 회원 리스트
      */
-    public List<Member> findAllMembers() {
+    public List<Member> findMembers() {
         return memberRepository.findAll();
     }
 
-    public Member findOneMember(Long memberId) {
+    public Member findMember(Long memberId) {
         return memberRepository.findOne(memberId);
     }
 }
