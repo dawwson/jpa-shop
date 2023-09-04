@@ -16,11 +16,11 @@ public class OrderRepository {
         em.persist(order);
     }
 
-    public Order findOrder(Long orderId) {
+    public Order findById(Long orderId) {
         return em.find(Order.class, orderId);
     }
 
-    /*public List<Order> findOrders(OrderSearch orderSearch) {
+    /*public List<Order> findAll(OrderSearch orderSearch) {
         return;
     }*/
 }

@@ -30,8 +30,8 @@ public class OrderService {
     @Transactional
     public Long createOrder(Long memberId, Long itemId, int count) {
         // 엔티티 조회
-        Member member = memberRepository.findOne(memberId);
-        Item item = itemRepository.findOne(itemId);
+        Member member = memberRepository.findById(memberId);
+        Item item = itemRepository.findById(itemId);
 
         // 배송정보 생성
         Delivery delivery = new Delivery();
@@ -55,7 +55,7 @@ public class OrderService {
     @Transactional
     public void cancelOrder(Long orderId) {
         // 주문 엔티티 조회
-        Order order = orderRepository.findOrder(orderId);
+        Order order = orderRepository.findById(orderId);
 
         // 주문 취소
         order.cancel();  // 객체의 프로퍼티만 변경해주면 JPA가 dirty checking 하여 업데이트 해준다.
