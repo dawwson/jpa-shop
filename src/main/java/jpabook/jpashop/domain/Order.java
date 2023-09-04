@@ -64,7 +64,7 @@ public class Order {
      * @param orderItems 주문 상품
      * @return 주문
      */
-    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
+    public static Order create(Member member, Delivery delivery, OrderItem... orderItems) {
         Order order = new Order();
         order.setMember(member);
         order.setDelivery(delivery);

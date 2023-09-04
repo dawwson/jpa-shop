@@ -33,11 +33,11 @@ public class OrderItem {
     /**
      * 주문 상품 생성
      * @param item 상품
-     * @param orderPrice 주문 상품
+     * @param orderPrice 주문 가격
      * @param count 주문 수량
      * @return 주문 상품
      */
-    public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
+    public static OrderItem create(Item item, int orderPrice, int count) {
         OrderItem orderItem = new OrderItem();
         orderItem.setItem(item);
         orderItem.setOrderPrice(orderPrice);
