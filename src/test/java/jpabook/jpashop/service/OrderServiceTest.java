@@ -26,7 +26,6 @@ class OrderServiceTest {
     @Autowired OrderRepository orderRepository;
 
     @Test
-    @Rollback(value = false)
     void 상품_주문() {
         // given
         Member member = createMember();
