@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
-@Getter @Setter
+@Getter @Setter  // TODO: setter 삭제
 public abstract class Item {
     @Id @GeneratedValue
     @Column(name = "item_id")
