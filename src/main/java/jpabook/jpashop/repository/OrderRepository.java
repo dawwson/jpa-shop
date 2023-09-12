@@ -64,4 +64,13 @@ public class OrderRepository {
 
         return query.getResultList();
     }
+
+    // fetch join(JPQL 문법) : Lazy 로딩 옵션 무시하고 join 해서 한 번의 쿼리로 값을 다 채워서 가져온다.
+    public List<Order> findAllWithMemberAndDelivery() {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class
+                ).getResultList();
+    }
 }
