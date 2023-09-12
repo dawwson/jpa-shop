@@ -9,10 +9,28 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController  // @Controller + @ResponseBody
 @RequiredArgsConstructor
 public class MemberApiController {
     private final MemberService memberService;
+
+    @GetMapping("/api/v1/members")
+    public List<Member> getMembersV1() {
+        return memberService.findMembers();
+    }
+
+    @GetMapping("/api/v2/members")
+    public Result getMembersV2() {
+        List<Member> members = memberService.findMembers();
+        List<MemberDto> memberDtos = members
+                .stream()
+                .map(member -> new MemberDto(member.getName()))
+                .collect(Collectors.toList());
+        return new Result(memberDtos);
+    }
 
     @PostMapping("/api/v1/members")
     public CreateMemberResponse saveMemberV1(
@@ -42,6 +60,20 @@ public class MemberApiController {
         memberService.updateMember(id, request.getName());
         Member updatedMember = memberService.findMember(id);
         return new UpdateMemberResponse(updatedMember.getId(), updatedMember.getName());
+    }
+
+    @Data
+    @AllArgsConstructor
+    private static class Result<T> {
+        // 'data' 필드로 한 번 감싸서 나가면 좋다 -> 나중에 다른 필드가 추가할 수도 있음(count 같은...)
+        private T data;
+    }
+
+    @Data
+    @AllArgsConstructor
+    private static class MemberDto {  // TODO: 이것만 네이밍이 xxxResponse가 아닌 이유는?
+        // 필요한 부분만 노출
+        private String name;
     }
 
     // 엔티티를 파라미터로 받거나 외부로 그대로 노출하는 일 방지 => 엔티티와 API 스펙 분리 필수!!
