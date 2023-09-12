@@ -4,11 +4,10 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.service.MemberService;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController  // @Controller + @ResponseBody
 @RequiredArgsConstructor
@@ -34,6 +33,17 @@ public class MemberApiController {
         return new CreateMemberResponse(newMemberId);
     }
 
+    @PutMapping("/api/v2/members/{id}")
+    public UpdateMemberResponse updateMemberV2(
+            @PathVariable("id") Long id,
+            @RequestBody @Valid UpdateMemberRequest request
+    ) {
+        // 커맨드-쿼리 분리 : 값을 변경했지만 반환을 하진 않는다.
+        memberService.updateMember(id, request.getName());
+        Member updatedMember = memberService.findMember(id);
+        return new UpdateMemberResponse(updatedMember.getId(), updatedMember.getName());
+    }
+
     // 엔티티를 파라미터로 받거나 외부로 그대로 노출하는 일 방지 => 엔티티와 API 스펙 분리 필수!!
     @Data
     private static class CreateMemberRequest {
@@ -42,7 +52,7 @@ public class MemberApiController {
     }
 
     @Data
-    static class CreateMemberResponse {
+    private static class CreateMemberResponse {
         private Long id;
 
         public CreateMemberResponse(Long id) {
@@ -50,4 +60,15 @@ public class MemberApiController {
         }
     }
 
+    @Data
+    private static class UpdateMemberRequest {
+        private String name;
+    }
+
+    @Data
+    @AllArgsConstructor
+    private static class UpdateMemberResponse {
+        private Long id;
+        private String name;
+    }
 }
