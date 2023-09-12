@@ -1,5 +1,6 @@
 package jpabook.jpashop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +12,8 @@ public class Delivery {
     @Column(name = "delivery_id")
     private Long id;
 
+    // Delivery -> Order 조회 방지
+    @JsonIgnore
     // 디폴트가 즉시로딩(EAGER) -> 지연로딩(LAZY)로 바꿔야 함
     @OneToOne(mappedBy = "delivery", fetch = FetchType.LAZY)
     private Order order;

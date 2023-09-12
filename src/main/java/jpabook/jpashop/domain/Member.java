@@ -1,5 +1,6 @@
 package jpabook.jpashop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,8 @@ public class Member {
     @Embedded
     private Address address;
 
+    // Member -> Order 조회 방지
+    @JsonIgnore
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
     // 컬렉션은 필드에서 초기화 => 엔티티를 영속화할 때 하이버네이트 내장 컬렉션으로 변경됨

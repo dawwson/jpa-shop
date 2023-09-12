@@ -26,6 +26,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	// 조회 무한루프 방지
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5-jakarta'
 	// 뷰 템플릿 변경사항을 서버 재시작 없이 즉시 반영
 	implementation 'org.springframework.boot:spring-boot-devtools'
 	// SQL 실행 파라미터를 로그로 남김
