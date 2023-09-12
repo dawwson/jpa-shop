@@ -66,11 +66,23 @@ public class OrderRepository {
     }
 
     // fetch join(JPQL 문법) : Lazy 로딩 옵션 무시하고 join 해서 한 번의 쿼리로 값을 다 채워서 가져온다.
+    // 여러 api에서 재사용 가능
     public List<Order> findAllWithMemberAndDelivery() {
         return em.createQuery(
                 "select o from Order o" +
                         " join fetch o.member m" +
                         " join fetch o.delivery d", Order.class
                 ).getResultList();
+    }
+
+    // 화면에는 성능 최적화 됐으나 재사용이 어려움. 코드가 좀 더 지저분한 감은 있음
+    public List<OrderSimpleQueryDto> findOrderDtos() {
+        return em.createQuery(
+                "select new jpabook.jpashop.repository.OrderSimpleQueryDto(" +
+                        "o.id, m.name, o.orderDate, o.status, d.address)" +
+                        " from Order o" +
+                        " join o.member m" +
+                        " join o.delivery d", OrderSimpleQueryDto.class
+        ).getResultList();
     }
 }
