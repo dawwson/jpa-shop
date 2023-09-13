@@ -85,17 +85,6 @@ public class OrderRepository {
                 .getResultList();
     }
 
-    // 화면에는 성능 최적화 됐으나 재사용이 어려움. 코드가 좀 더 지저분한 감은 있음
-    public List<OrderSimpleQueryDto> findOrderDtos() {
-        return em.createQuery(
-                "select new jpabook.jpashop.repository.OrderSimpleQueryDto(" +
-                        "o.id, m.name, o.orderDate, o.status, d.address)" +
-                        " from Order o" +
-                        " join o.member m" +
-                        " join o.delivery d", OrderSimpleQueryDto.class
-        ).getResultList();
-    }
-
     public List<Order> findAllWithItem() {
         // db에 distinct를 포함해서 쿼리 => order의 id 기준으로 중복이 있으면 중복 제거
         // (스프링부트 3부터는 hibernate 6을 사용하는데 fetch join 시 자동으로 중복 제거를 해줌)
