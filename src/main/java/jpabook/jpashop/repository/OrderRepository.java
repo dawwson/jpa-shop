@@ -85,4 +85,19 @@ public class OrderRepository {
                         " join o.delivery d", OrderSimpleQueryDto.class
         ).getResultList();
     }
+
+    public List<Order> findAllWithItem() {
+        // db에 distinct를 포함해서 쿼리 => order의 id 기준으로 중복이 있으면 중복 제거
+        // (스프링부트 3부터는 hibernate 6을 사용하는데 fetch join 시 자동으로 중복 제거를 해줌)
+        // 단점 : 페이징을 못함(offset, limit 쿼리가 안 날라감)
+        // (하이버네이트는 모든 데이터를 DB에서 읽어오고, 메모리에서 페이징 해버린다(데이터 많으면 위험함)
+        return em.createQuery(
+                "select distinct o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d" +
+                        " join fetch o.orderItems oi" +
+                        " join fetch oi.item i", Order.class
+                )
+                .getResultList();
+    }
 }
