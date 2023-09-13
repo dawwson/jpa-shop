@@ -93,4 +93,42 @@ public class OrderQueryRepository {
                 .map(order -> order.getOrderId())
                 .collect(Collectors.toList());
     }
+
+    public List<OrderFlatDto> findAllByDto_flat() {
+        // 장점 : 쿼리가 한 번만 나간다 / 단점 : 페이징을 못한다, 중복 데이터가 포함된다.
+        return em.createQuery(
+                "select new jpabook.jpashop.repository.order.query.OrderFlatDto(" +
+                        "o.id, m.name, o.orderDate, o.status, d.address, i.name, oi.orderPrice, oi.count)" +
+                        " from Order o" +
+                        " join o.member m" +
+                        " join o.delivery d" +
+                        " join o.orderItems oi" +
+                        " join oi.item i", OrderFlatDto.class
+        ).getResultList();
+        //select
+        //    o1_0.order_id,
+        //        m1_0.name,
+        //        o1_0.order_date,
+        //        o1_0.status,
+        //        d1_0.city,
+        //        d1_0.street,
+        //        d1_0.zipcode,
+        //        i1_0.name,
+        //        o2_0.order_price,
+        //        o2_0.count
+        //    from
+        //        orders o1_0
+        //    join
+        //        member m1_0
+        //            on m1_0.member_id=o1_0.member_id
+        //    join
+        //        delivery d1_0
+        //            on d1_0.delivery_id=o1_0.delivery_id
+        //    join
+        //        order_item o2_0
+        //            on o1_0.order_id=o2_0.order_id
+        //    join
+        //        item i1_0
+        //            on i1_0.item_id=o2_0.item_id
+    }
 }
