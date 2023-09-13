@@ -75,6 +75,16 @@ public class OrderRepository {
                 ).getResultList();
     }
 
+    public List<Order> findAllWithMemberAndDelivery(int offset, int limit) {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
     // 화면에는 성능 최적화 됐으나 재사용이 어려움. 코드가 좀 더 지저분한 감은 있음
     public List<OrderSimpleQueryDto> findOrderDtos() {
         return em.createQuery(

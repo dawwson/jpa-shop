@@ -6,11 +6,10 @@ import jpabook.jpashop.domain.OrderItem;
 import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.repository.OrderRepository;
 import jpabook.jpashop.repository.OrderSearch;
-import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -78,6 +77,7 @@ public class OrderApiController {
         private int count;
 
         public OrderItemDto(OrderItem orderItem) {
+            System.out.println(orderItem.getItem().getName());
             this.itemName = orderItem.getItem().getName();
             this.orderPrice = orderItem.getOrderPrice();
             this.count = orderItem.getCount();
@@ -88,6 +88,22 @@ public class OrderApiController {
     public List<OrderDto> getOrdersV3() {
         List<Order> orders = orderRepository.findAllWithItem();
 
+        List<OrderDto> result = orders.stream()
+                .map(order -> new OrderDto(order))
+                .collect(Collectors.toList());
+        return result;
+    }
+
+    @GetMapping("/api/v3.1/orders")
+    public List<OrderDto> getOrdersV3_page(
+            @RequestParam(value = "offset", defaultValue = "0") int offset,
+            @RequestParam(value = "limit", defaultValue = "100") int limit
+    ) {
+        // 1. OneToOne, ManyToOne은 fetch join 한다. + paging
+        List<Order> orders = orderRepository.findAllWithMemberAndDelivery(offset, limit);
+
+        // 2. orderItem lazy loading 할 때
+        // SQL IN 절로 batch size만큼 조회할 OrderItem id가 들어간다.
         List<OrderDto> result = orders.stream()
                 .map(order -> new OrderDto(order))
                 .collect(Collectors.toList());
